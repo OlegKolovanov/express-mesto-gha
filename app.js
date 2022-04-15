@@ -20,7 +20,7 @@ app.use((req, res, next) => {
 });
 
 app.use('/users', require('./routes/users'));
-app.use('/', require('./routes/cards'));
+app.use('/cards', require('./routes/cards'));
 
 app.use((req, res) => {
   res.status(404).send({ message: 'Запрашиваемая страница отсутсвует' });
