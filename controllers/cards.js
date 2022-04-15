@@ -8,7 +8,7 @@ module.exports.getCard = (req, res)=>{
 
 module.exports.createCard = (req, res)=>{
   const { name, link } = req.body;
-  Card.create({name, link})
+  Card.create({name, link}, req.user._id)
   .then((card) => res.send({ data: card }))
   .catch((err) => (err.name === 'ValidationError'
       ? res.status(400).send({ message: 'Переданны некорректные данные' })
