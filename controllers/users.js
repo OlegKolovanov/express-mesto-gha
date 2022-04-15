@@ -25,7 +25,7 @@ module.exports.getId = (req, res) => {
 }
 
 module.exports.createUsers = (req, res) => {
-  const {name, about, avatar} = req.body
+  const {name, about, avatar} = req.body;
   User.create({name, about, avatar})
   .then((user) => res.send({ data: user }))
     .catch((err) => ((err.name === 'ValidationError')
@@ -34,6 +34,7 @@ module.exports.createUsers = (req, res) => {
 }
 
 module.exports.createMe = (req, res) => {
+  const { name, about } = req.body;
   User.findByIdAndUpdate(req.params.userId, { name, about }, updateParams)
   .then((user) => ((!user)
   ? res.status(404).send({ message: 'Пользователь не найден' })
@@ -44,6 +45,7 @@ module.exports.createMe = (req, res) => {
 };
 
 module.exports.createUserAvatar = (req, res) => {
+  const { avatar } = req.body;
   User.findByIdAndUpdate(req.params.userId, { avatar }, { new: true }, updateParams)
   .then((user) => ((!user)
   ? res.status(404).send({ message: 'Пользователь не найден' })
