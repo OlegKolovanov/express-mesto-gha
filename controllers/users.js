@@ -46,16 +46,12 @@ module.exports.createMe = (req, res) => {
 
 module.exports.createUserAvatar = (req, res) => {
   const { avatar } = req.body;
-
-  User.findByIdAndUpdate(
-    req.user._id,
-    { avatar },
-    updateParams,
-  )
-    .then((user) => ((!user)
-      ? res.status(404).send({ message: 'Пользователь не найден' })
-      : res.send({ data: user })))
-    .catch((err) => ((err.name === 'ValidationError')
-      ? res.status(400).send({ message: 'Переданны некорректные данные для смены аватара' })
-      : res.status(500).send({ message: 'Ошибка сервера' })));
+  
+  User.findByIdAndUpdate(req.user._id, { avatar }, updateParams)
+  .then((user) => ((!user)
+  ? res.status(404).send({ message: 'Пользователь не найден' })
+  : res.send({ data: user })))
+.catch((err) => ((err.name === 'ValidationError')
+  ? res.status(400).send({ message: 'Переданны некорректные данные для смены аватара' })
+  : res.status(500).send({ message: 'Ошибка сервера' })));
 };

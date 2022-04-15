@@ -26,9 +26,6 @@ app.use((req, res) => {
   res.status(404).send({ message: 'Запрашиваемая страница отсутсвует' });
 });
 
-module.exports.createCard = (req, res) => {
-  console.log(req.user._id); // _id станет доступен
-};
 
 app.listen(PORT, () => {
 
