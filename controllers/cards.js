@@ -7,6 +7,7 @@ module.exports.getCard = (req, res)=>{
 }
 
 module.exports.createCard = (req, res)=>{
+  const { name, link } = req.body;
   Card.create({name, link})
   .then((card) => res.send({ data: card }))
   .catch((err) => (err.name === 'ValidationError'
