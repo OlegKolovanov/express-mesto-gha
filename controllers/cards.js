@@ -8,11 +8,12 @@ module.exports.getCard = (req, res)=>{
 
 module.exports.createCard = (req, res)=>{
   const { name, link } = req.body;
-  const owner = req.user._id
-  Card.create({name, link, owner})
-  .then((card) => res.send({ data: card }))
-  .catch((err) => (err.name === 'ValidationError'
-      ? res.status(400).send({ message: 'Переданны некорректные данные' })
+  const owner = req.user._id;
+
+  Card.create({ name, link, owner })
+    .then((cards) => res.send({ data: cards }))
+    .catch((err) => (err.name === 'ValidationError'
+      ? res.status(400).send({ message: 'Переданы некорректные данные' })
       : res.status(500).send({ message: 'Ошибка сервера' })));
 }
 
@@ -22,7 +23,7 @@ module.exports.deleteCard = (req, res)=>{
       ? res.status(404).send({ message: 'Карта не найдена' })
       : res.send({ data: card })))
     .catch((err) => (err.name === 'CastError'
-      ? res.status(400).send({ message: 'Переданны некорректные данные' })
+      ? res.status(400).send({ message: 'Переданы некорректные данные' })
       : res.status(500).send({ message: 'Ошибка сервера' })));
 }
 
@@ -36,7 +37,7 @@ module.exports.likeCard = (req, res) => {
       ? res.status(404).send({ message: 'Карта не найдена' })
       : res.send({ data: card })))
     .catch((err) => (err.name === 'CastError'
-      ? res.status(400).send({ message: 'Переданны некорректные данные' })
+      ? res.status(400).send({ message: 'Переданы некорректные данные' })
       : res.status(500).send({ message: 'Ошибка сервера' })));
 };
 
@@ -50,6 +51,6 @@ module.exports.dislikeCard = (req, res) => {
       ? res.status(404).send({ message: 'Карта не найдена' })
       : res.send({ data: card })))
     .catch((err) => (err.name === 'CastError'
-      ? res.status(400).send({ message: 'Переданны некорректные данные' })
+      ? res.status(400).send({ message: 'Переданы некорректные данные' })
       : res.status(500).send({ message: 'Ошибка сервера' })));
 };
