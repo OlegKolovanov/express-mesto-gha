@@ -9,13 +9,40 @@ module.exports.getUsers = (req, res) => {
 
 module.exports.getId = (req, res) => {
   User.find(req.params._id)
-  .then(users => res.send({data: users}))
-  .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
+  .then((user) => ((!user)
+      ? res.status(404).send({ message: 'Пользователь не найден' })
+      : res.send({ data: user })))
+
+    .catch((err) => ((err.name === 'SomeErr')
+      ? res.status(400).send({ message: 'Переданны некорректные данные для поиска' })
+      : res.status(500).send({ message: 'Ошибка сервера' })));
 }
 
 module.exports.createUsers = (req, res) => {
   const {name, about, avatar} = req.body
   User.create({name, about, avatar})
   .then((user) => res.send({ data: user }))
-  .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
+    .catch((err) => ((err.name === 'ValidationError')
+      ? res.status(400).send({ message: 'Переданны некорректные данные для создания профиля' })
+      : res.status(500).send({ message: 'Ошибка сервера' })));
 }
+
+module.exports.createMe = (req, res) => {
+  User.findByIdAndUpdate(req.params.id, { name, about })
+  .then((user) => ((!user)
+  ? res.status(404).send({ message: 'Пользователь не найден' })
+  : res.send({ data: user })))
+.catch((err) => ((err.name === 'ValidationError')
+  ? res.status(400).send({ message: 'Переданны некорректные данные для редактирования профиля' })
+  : res.status(500).send({ message: 'Ошибка сервера' })));
+};
+
+module.exports.createUserAvatar = (req, res) => {
+  User.findByIdAndUpdate(req.params.id, { avatar }, { new: true })
+  .then((user) => ((!user)
+  ? res.status(404).send({ message: 'Пользователь не найден' })
+  : res.send({ data: user })))
+.catch((err) => ((err.name === 'ValidationError')
+  ? res.status(400).send({ message: 'Переданны некорректные данные для смены аватара' })
+  : res.status(500).send({ message: 'Ошибка сервера' })));
+};
