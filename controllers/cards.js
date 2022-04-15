@@ -22,7 +22,7 @@ module.exports.deleteCard = (req, res)=>{
   .then((card) => ((!card)
       ? res.status(404).send({ message: 'Карта не найдена' })
       : res.send({ data: card })))
-    .catch((err) => (err.name === 'SomeError'
+    .catch((err) => (err.name === 'CastError'
       ? res.status(400).send({ message: 'Переданы некорректные данные' })
       : res.status(500).send({ message: 'Ошибка сервера' })));
 }
@@ -36,7 +36,7 @@ module.exports.likeCard = (req, res) => {
     .then((card) => ((!card)
       ? res.status(404).send({ message: 'Карта не найдена' })
       : res.send({ data: card })))
-    .catch((err) => (err.name === 'SomeError'
+    .catch((err) => (err.name === 'CastError'
       ? res.status(400).send({ message: 'Переданы некорректные данные для постановки лайка' })
       : res.status(500).send({ message: 'Ошибка сервера' })));
 };
@@ -50,7 +50,7 @@ module.exports.dislikeCard = (req, res) => {
     .then((card) => ((!card)
       ? res.status(404).send({ message: 'Карта не найдена' })
       : res.send({ data: card })))
-    .catch((err) => (err.name === 'SomeError'
+    .catch((err) => (err.name === 'CastError'
       ? res.status(400).send({ message: 'Переданы некорректные данные для снятия лайка' })
       : res.status(500).send({ message: 'Ошибка сервера' })));
 };
