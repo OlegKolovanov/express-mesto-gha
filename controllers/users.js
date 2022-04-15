@@ -1,5 +1,11 @@
 const User = require('../models/user')
 
+const updateParams = {
+  new: true,
+  runValidators: true,
+  upsert: true,
+};
+
 
 module.exports.getUsers = (req, res) => {
   User.find({})
@@ -28,7 +34,7 @@ module.exports.createUsers = (req, res) => {
 }
 
 module.exports.createMe = (req, res) => {
-  User.findByIdAndUpdate(req.params.id, { name, about })
+  User.findByIdAndUpdate(req.params.id, { name, about }, updateParams)
   .then((user) => ((!user)
   ? res.status(404).send({ message: 'Пользователь не найден' })
   : res.send({ data: user })))
@@ -38,7 +44,7 @@ module.exports.createMe = (req, res) => {
 };
 
 module.exports.createUserAvatar = (req, res) => {
-  User.findByIdAndUpdate(req.params.id, { avatar }, { new: true })
+  User.findByIdAndUpdate(req.params.id, { avatar }, { new: true }, updateParams)
   .then((user) => ((!user)
   ? res.status(404).send({ message: 'Пользователь не найден' })
   : res.send({ data: user })))
