@@ -1,9 +1,9 @@
-const Card = require("../models/card");
+const Card = require('../models/card');
 
 module.exports.getCard = (req, res) => {
   Card.find({})
     .then((cards) => res.send({ data: cards }))
-    .catch(() => res.status(500).send({ message: "Произошла ошибка" }));
+    .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
 };
 
 module.exports.createCard = (req, res) => {
@@ -13,13 +13,13 @@ module.exports.createCard = (req, res) => {
   Card.create({ name, link, owner })
     .then((cards) => res.send({ data: cards }))
     .catch((err) =>
-      err.name === "ValidationError"
+      err.name === 'ValidationError'
         ? res
             .status(400)
             .send({
-              message: "Переданы некорректные данные при создании карточки",
+              message: 'Переданы некорректные данные при создании карточки',
             })
-        : res.status(500).send({ message: "Ошибка сервера" })
+        : res.status(500).send({ message: 'Ошибка сервера' })
     );
 };
 
@@ -27,13 +27,13 @@ module.exports.deleteCard = (req, res) => {
   Card.findByIdAndRemove(req.params.cardId)
     .then((card) =>
       !card
-        ? res.status(404).send({ message: "Карта не найдена" })
+        ? res.status(404).send({ message: 'Карта не найдена' })
         : res.send({ data: card })
     )
     .catch((err) =>
-      err.name === "CastError"
-        ? res.status(400).send({ message: "Переданы некорректные данные" })
-        : res.status(500).send({ message: "Ошибка сервера" })
+      err.name === 'CastError'
+        ? res.status(400).send({ message: 'Переданы некорректные данные' })
+        : res.status(500).send({ message: 'Ошибка сервера' })
     );
 };
 
@@ -45,17 +45,17 @@ module.exports.likeCard = (req, res) => {
   )
     .then((card) =>
       !card
-        ? res.status(404).send({ message: "Карта не найдена" })
+        ? res.status(404).send({ message: 'Карта не найдена' })
         : res.send({ data: card })
     )
     .catch((err) =>
-      err.name === "CastError"
+      err.name === 'CastError'
         ? res
             .status(400)
             .send({
-              message: "Переданы некорректные данные для постановки лайка",
+              message: 'Переданы некорректные данные для постановки лайка',
             })
-        : res.status(500).send({ message: "Ошибка сервера" })
+        : res.status(500).send({ message: 'Ошибка сервера' })
     );
 };
 
@@ -67,14 +67,14 @@ module.exports.dislikeCard = (req, res) => {
   )
     .then((card) =>
       !card
-        ? res.status(404).send({ message: "Карта не найдена" })
+        ? res.status(404).send({ message: 'Карта не найдена' })
         : res.send({ data: card })
     )
     .catch((err) =>
-      err.name === "CastError"
+      err.name === 'CastError'
         ? res
             .status(400)
-            .send({ message: "Переданы некорректные данные для снятия лайка" })
-        : res.status(500).send({ message: "Ошибка сервера" })
+            .send({ message: 'Переданы некорректные данные для снятия лайка' })
+        : res.status(500).send({ message: 'Ошибка сервера' })
     );
 };

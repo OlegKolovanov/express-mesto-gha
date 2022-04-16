@@ -1,13 +1,12 @@
 {
+  "extends": "airbnb-base",
   "rules": {
-    "no-underscore-dangle": ["error", { "allow": ["_id"]}]
+    "no-underscore-dangle": ["error", { "allow": ["_id"] }],
+    "no-console": "off"
   },
-  
-  "parserOptions": {
-    "ecmaVersion": 2017
-},
+  "editor.codeActionsOnSave": {
 
-"env": {
-    "es6": true
-}
+    "source.fixAll.eslint": true
+
+  }
 }
