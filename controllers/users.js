@@ -11,26 +11,22 @@ module.exports.getId = (req, res) => {
     .then((user) => ((!user)
       ? res.status(404).send({ message: 'Пользователь не найден' })
       : res.send({ data: user })))
-    .catch((err) =>
-      err.name === 'CastError'
-        ? res
-            .status(400)
-            .send({ message: 'Переданы некорректные данные для поиска' })
-        : res.status(500).send({ message: 'Ошибка сервера' })
-    );
+    .catch((err) => (err.name === 'CastError'
+      ? res
+        .status(400)
+        .send({ message: 'Переданы некорректные данные для поиска' })
+      : res.status(500).send({ message: 'Ошибка сервера' })));
 };
 
 module.exports.createUsers = (req, res) => {
   const { name, about, avatar } = req.body;
   User.create({ name, about, avatar })
     .then((user) => res.send({ data: user }))
-    .catch((err) =>
-      err.name === 'ValidationError'
-        ? res.status(400).send({
-            message: 'Переданы некорректные данные при создании пользователя',
-          })
-        : res.status(500).send({ message: 'Ошибка сервера' })
-    );
+    .catch((err) => (err.name === 'ValidationError'
+      ? res.status(400).send({
+        message: 'Переданы некорректные данные при создании пользователя',
+      })
+      : res.status(500).send({ message: 'Ошибка сервера' })));
 };
 
 module.exports.createMe = (req, res) => {
@@ -38,20 +34,16 @@ module.exports.createMe = (req, res) => {
   User.findByIdAndUpdate(
     req.user._id,
     { name, about },
-    { new: true, runValidators: true }
+    { new: true, runValidators: true },
   )
-    .then((user) =>
-      !user
-        ? res.status(404).send({ message: 'Пользователь не найден' })
-        : res.send({ data: user })
-    )
-    .catch((err) =>
-      err.name === 'ValidationError'
-        ? res.status(400).send({
-            message: 'Переданы некорректные данные для редактирования профиля',
-          })
-        : res.status(500).send({ message: 'Ошибка сервера' })
-    );
+    .then((user) => (!user
+      ? res.status(404).send({ message: 'Пользователь не найден' })
+      : res.send({ data: user })))
+    .catch((err) => (err.name === 'ValidationError'
+      ? res.status(400).send({
+        message: 'Переданы некорректные данные для редактирования профиля',
+      })
+      : res.status(500).send({ message: 'Ошибка сервера' })));
 };
 
 module.exports.createUserAvatar = (req, res) => {
@@ -60,18 +52,14 @@ module.exports.createUserAvatar = (req, res) => {
   User.findByIdAndUpdate(
     req.user._id,
     { avatar },
-    { new: true, runValidators: true }
+    { new: true, runValidators: true },
   )
-    .then((user) =>
-      !user
-        ? res.status(404).send({ message: 'Пользователь не найден' })
-        : res.send({ data: user })
-    )
-    .catch((err) =>
-      err.name === 'ValidationError'
-        ? res.status(400).send({
-            message: 'Переданны некорректные данные для смены аватара',
-          })
-        : res.status(500).send({ message: 'Ошибка сервера' })
-    );
+    .then((user) => (!user
+      ? res.status(404).send({ message: 'Пользователь не найден' })
+      : res.send({ data: user })))
+    .catch((err) => (err.name === 'ValidationError'
+      ? res.status(400).send({
+        message: 'Переданны некорректные данные для смены аватара',
+      })
+      : res.status(500).send({ message: 'Ошибка сервера' })));
 };
