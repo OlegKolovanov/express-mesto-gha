@@ -131,7 +131,7 @@ module.exports.getMe = (req, res, next) => {
   User.findById(req.user._id)
     .then((user) => {
       if (!user) {
-        res.status(404).send({ message: 'Пользователь не найден' });
+        throw new NotFoundErr('Пользователь не найден');
       } else {
         res.send({ data: user });
       }
