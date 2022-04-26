@@ -6,9 +6,9 @@ const handleAuthError = (res) => {
     .send({ message: 'Ошибка авторизации' });
 };
 // eslint-disable-next-line arrow-body-style
-const extractBearerToken = (header) => {
-  return header.replace('Bearer ', '');
-};
+// const extractBearerToken = (header) => {
+//   return header.replace('Bearer ', '');
+// };
 
 // eslint-disable-next-line consistent-return
 module.exports = (req, res, next) => {
@@ -18,7 +18,7 @@ module.exports = (req, res, next) => {
     return handleAuthError(res);
   }
 
-  const token = extractBearerToken(authorization);
+  const token = authorization.replace('Bearer ', '');
   let payload;
 
   try {
