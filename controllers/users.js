@@ -9,7 +9,7 @@ const Conflict = require('../errors/Conflict');
 module.exports.getUsers = (req, res, next) => {
   User.find({})
     .then((users) => res.send({ data: users }))
-    .catch(next);
+    .catch((err) => next(err));
 };
 
 module.exports.getId = (req, res, next) => {
@@ -19,16 +19,17 @@ module.exports.getId = (req, res, next) => {
     })
     .then((user) => {
       if (!user) {
-        throw (new NotFoundErr('Пользователь не найден'));
+        throw new NotFoundErr('Пользователь не найден');
       } else {
         res.send({ data: user });
       }
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        return next(new BadRequest('Переданны некорректные данные'));
+        next(new BadRequest('Переданны некорректные данные'));
+      } else {
+        next(err);
       }
-      return next(err);
     });
 };
 
@@ -37,28 +38,37 @@ module.exports.createUsers = (req, res, next) => {
     name, about, avatar, email, password,
   } = req.body;
 
-  if (!email || !password) {
-    return res.status(BadRequest).send({ message: 'Поля email и password обязательны' });
-  }
-  // хешируем пароль
-  return bcrypt.hash(req.body.password, 10)
-    .then((hash) => User.create({
-      name, about, avatar, email, password: hash,
-    }))
-    .then((user) => {
-      res.status(200).send({
-        name: user.name, about: user.about, avatar: user.avatar, _id: user._id, email: user.email,
-      });
+  User.find({ email })
+    .then((result) => {
+      if (result.length === 0) {
+        bcrypt.hash(password, 10)
+          .then((hash) => {
+            User.create({
+              name, about, avatar, email, password: hash,
+            });
+          })
+          .then(() => {
+            res.status(200).send({
+              data: {
+                name,
+                about,
+                avatar,
+                email,
+              },
+            });
+          })
+          .catch((err) => {
+            if (err.name === 'ValidationError') {
+              next(new BadRequest('Переданны некорректные данные'));
+            } else {
+              next(err);
+            }
+          });
+      } else {
+        next(new Conflict('Такая почта уже зарегистрирована'));
+      }
     })
-    .catch((err) => {
-      if (err.name === 'ValidationError') {
-        return next(new BadRequest('Переданы некорректные данные при создании пользователя'));
-      }
-      if (err.code === 11000) {
-        return next(new Conflict('Передан уже зарегистрированный email.'));
-      }
-      return next(err);
-    });
+    .catch(next);
 };
 //   const { name, about, avatar } = req.body;
 //   User.create({ name, about, avatar })
@@ -119,19 +129,19 @@ module.exports.createUserAvatar = (req, res, next) => {
 
 module.exports.getMe = (req, res, next) => {
   User.findById(req.user._id)
-    // eslint-disable-next-line consistent-return
     .then((user) => {
       if (!user) {
-        return next(new NotFoundErr('Пользователь не найден'));
+        res.status(404).send({ message: 'Пользователь не найден' });
+      } else {
+        res.send({ data: user });
       }
-      res.send({ data: user });
     })
-    // eslint-disable-next-line consistent-return
     .catch((err) => {
       if (err.name === 'CastError') {
-        return next(new BadRequest('Переданны некорректные данные'));
+        next(new BadRequest('Переданны некорректные данные'));
+      } else {
+        next(err);
       }
-      next(err);
     });
 };
 
