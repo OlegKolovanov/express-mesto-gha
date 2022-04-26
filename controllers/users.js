@@ -157,7 +157,8 @@ module.exports.login = (req, res, next) => {
         .cookie('jwt', token, {
           maxAge: 3600000 * 24 * 7,
           httpOnly: true,
-        });
+        })
+        .end();
     })
     .catch(() => {
       next(new Unauthorized('Неверно указана электронная почта или пaроль'));
