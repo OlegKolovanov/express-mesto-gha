@@ -2,7 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const { celebrate, errors, Joi } = require('celebrate');
-const { login, createUser } = require('./controllers/users');
+const { login, createUsers } = require('./controllers/users');
 const auth = require('./middlewares/auth');
 const handleError = require('./middlewares/handleError');
 const NotFoundErr = require('./errors/NotFoundErr');
@@ -23,6 +23,7 @@ app.post('/signin', celebrate({
     password: Joi.string().required(),
   }),
 }), login);
+
 app.post('/signup', celebrate({
   body: Joi.object().keys({
     name: Joi.string().min(2).max(30),
@@ -31,7 +32,8 @@ app.post('/signup', celebrate({
     email: Joi.string().required().email(),
     password: Joi.string().required(),
   }),
-}), createUser);
+}), createUsers);
+
 app.use(auth);
 app.use('/users', require('./routes/users'));
 app.use('/cards', require('./routes/cards'));
