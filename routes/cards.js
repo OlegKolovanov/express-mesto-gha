@@ -26,13 +26,13 @@ router.delete('/:cardId', celebrate({
 
 router.put('/:cardId/likes', celebrate({
   params: Joi.object().keys({
-    cardId: Joi.string().hex().alphanum().length(24),
+    cardId: Joi.string().hex().required().length(24),
   }),
 }), likeCard);
 
 router.delete('/:cardId/likes', celebrate({
   params: Joi.object().keys({
-    cardId: Joi.string().hex().alphanum().length(24),
+    cardId: Joi.string().hex().required().length(24),
   }),
 }), dislikeCard);
 

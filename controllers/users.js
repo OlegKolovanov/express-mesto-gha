@@ -132,7 +132,7 @@ module.exports.getMe = (req, res, next) => {
   User.findById(id)
     .orFail(() => {
       throw new NotFoundErr(
-        'Запрашиваемый пользователь  не найден',
+        'Запрашиваемый пользователь не найден',
       );
     })
     .then((user) => res.status(200).send(user))
