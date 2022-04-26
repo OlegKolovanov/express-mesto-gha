@@ -42,11 +42,9 @@ module.exports.createUsers = (req, res, next) => {
     .then((result) => {
       if (result.length === 0) {
         bcrypt.hash(password, 10)
-          .then((hash) => {
-            User.create({
-              name, about, avatar, email, password: hash,
-            });
-          })
+          .then((hash) => User.create({
+            name, about, avatar, email, password: hash,
+          }))
           .then(() => {
             res.status(200).send({
               data: {
@@ -70,15 +68,6 @@ module.exports.createUsers = (req, res, next) => {
     })
     .catch(next);
 };
-//   const { name, about, avatar } = req.body;
-//   User.create({ name, about, avatar })
-//     .then((user) => res.send({ data: user }))
-//     .catch((err) => (err.name === 'ValidationError'
-//       ? res.status(400).send({
-//         message: 'Переданы некорректные данные при создании пользователя',
-//       })
-//       : res.status(500).send({ message: 'Ошибка сервера' })));
-// };
 
 module.exports.createMe = (req, res, next) => {
   const { name, about } = req.body;
@@ -128,15 +117,22 @@ module.exports.createUserAvatar = (req, res, next) => {
 };
 
 module.exports.getMe = (req, res, next) => {
-  const id = req.user._id;
-  User.findById(id)
-    .orFail(() => {
-      throw new NotFoundErr(
-        'Запрашиваемый пользователь не найден',
-      );
+  User.findById(req.user._id)
+    .then((user) => {
+      if (!user) {
+        throw new NotFoundErr('Пользователь не найден');
+      } else {
+        res.send({ data: user });
+      }
     })
-    .then((user) => res.status(200).send(user))
-    .catch((err) => next(err));
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        next(new BadRequest('Переданны некорректные данные'));
+      } else {
+        next(err);
+      }
+    });
+};
 };
 
 module.exports.login = (req, res, next) => {
