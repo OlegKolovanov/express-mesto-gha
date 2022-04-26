@@ -147,13 +147,13 @@ module.exports.login = (req, res, next) => {
       // создадим токен
       const token = jwt.sign({ _id: user._id }, 'super-strong-secret', { expiresIn: '7d' });
 
-      return res
-        .cookie('token', token, {
-          maxAge: 3600000 * 24 * 7,
-          httpOnly: true,
-          sameSite: true,
-        })
-        .json({ message: 'Успешная авторизация' });
+      // res
+      //   .cookie('jwt', token, {
+      //     maxAge: 3600000 * 24 * 7,
+      //     httpOnly: true,
+      //   })
+      //   .end();
+      res.send({ token });
     })
     .catch(() => {
       next(new Unauthorized('Неверно указана электронная почта или пaроль'));
