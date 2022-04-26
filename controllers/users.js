@@ -128,21 +128,15 @@ module.exports.createUserAvatar = (req, res, next) => {
 };
 
 module.exports.getMe = (req, res, next) => {
-  User.findById(req.user._id)
-    .then((user) => {
-      if (!user) {
-        throw new NotFoundErr('Пользователь не найден');
-      } else {
-        res.send({ data: user });
-      }
+  const id = req.user._id;
+  User.findById(id)
+    .orFail(() => {
+      throw new NotFoundErr(
+        'Запрашиваемый пользователь  не найден',
+      );
     })
-    .catch((err) => {
-      if (err.name === 'CastError') {
-        next(new BadRequest('Переданны некорректные данные'));
-      } else {
-        next(err);
-      }
-    });
+    .then((user) => res.status(200).send(user))
+    .catch((err) => next(err));
 };
 
 module.exports.login = (req, res, next) => {
