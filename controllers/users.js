@@ -18,11 +18,7 @@ module.exports.getId = (req, res, next) => {
       next(new NotFoundErr('Пользователь не найден, попробуйте еще раз'));
     })
     .then((user) => {
-      if (!user) {
-        throw new NotFoundErr('Пользователь не найден');
-      } else {
-        res.send({ data: user });
-      }
+      res.send({ data: user });
     })
     .catch((err) => {
       if (err.name === 'CastError') {
