@@ -8,7 +8,7 @@ const requestLogger = expressWinston.logger({
   format: winston.format.json(),
 });
 
-const errorLgger = expressWinston.errorLogger({
+const errorLogger = expressWinston.errorLogger({
   transports: [
     new winston.transports.File({ filename: 'error.log' }),
   ],
@@ -17,5 +17,5 @@ const errorLgger = expressWinston.errorLogger({
 
 module.exports = {
   requestLogger,
-  errorLgger,
+  errorLogger,
 };
