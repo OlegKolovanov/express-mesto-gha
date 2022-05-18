@@ -20,7 +20,7 @@ mongoose.connect('mongodb://localhost:27017/mestodb', () => {
 
 app.use(requestLogger);
 
-app.post('/signin', celebrate({
+app.post('/api/signin', celebrate({
   body: Joi.object().keys({
     email: Joi.string().required().email(),
     password: Joi.string().required(),
