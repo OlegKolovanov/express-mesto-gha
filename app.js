@@ -39,8 +39,8 @@ app.post('/api/signup', celebrate({
 
 app.use(auth);
 
-app.use('/users', require('./routes/users'));
-app.use('/cards', require('./routes/cards'));
+app.use('/api/users', require('./routes/users'));
+app.use('/api/cards', require('./routes/cards'));
 
 app.use('*', (req, res, next) => {
   next(new NotFoundErr('Страница не найдена'));
