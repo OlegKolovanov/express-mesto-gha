@@ -4,6 +4,8 @@ require('dotenv').config();
 
 const { NODE_ENV, JWT_SECRET } = process.env;
 
+const getToken = (header) => header.replace('Bearer ', '');
+
 // eslint-disable-next-line consistent-return
 module.exports = (req, res, next) => {
   const { authorization } = req.headers;
@@ -12,7 +14,7 @@ module.exports = (req, res, next) => {
     return next(new Unauthorized('Необходима авторизация'));
   }
 
-  const token = authorization.replace('Bearer ', '');
+  const token = getToken(authorization);
   let payload;
 
   try {
@@ -23,5 +25,5 @@ module.exports = (req, res, next) => {
 
   req.user = payload; // записываем пейлоуд в объект запроса
 
-  return next(); // пропускаем запрос дальше
+  next(); // пропускаем запрос дальше
 };
