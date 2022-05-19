@@ -146,7 +146,7 @@ module.exports.login = (req, res, next) => {
           httpOnly: true,
           sameSite: true,
         });
-      res.status(200).send({ token });
+      res.send({ token });
     })
     .catch(() => {
       next(new Unauthorized('Неверно указана электронная почта или пaроль'));
