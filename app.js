@@ -29,14 +29,14 @@ app.get('/crash-test', () => {
   }, 0);
 });
 
-app.post('/api/signin', celebrate({
+app.post('/signin', celebrate({
   body: Joi.object().keys({
     email: Joi.string().required().email(),
     password: Joi.string().required(),
   }),
 }), login);
 
-app.post('/api/signup', celebrate({
+app.post('/signup', celebrate({
   body: Joi.object().keys({
     name: Joi.string().min(2).max(30),
     about: Joi.string().min(2).max(30),
@@ -48,8 +48,8 @@ app.post('/api/signup', celebrate({
 
 app.use(auth);
 
-app.use('/api/users', require('./routes/users'));
-app.use('/api/cards', require('./routes/cards'));
+app.use('/users', require('./routes/users'));
+app.use('/cards', require('./routes/cards'));
 
 app.use('*', (req, res, next) => {
   next(new NotFoundErr('Страница не найдена'));
